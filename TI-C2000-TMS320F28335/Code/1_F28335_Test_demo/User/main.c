@@ -1,7 +1,7 @@
 /*
  * main.c
  *
- *  Created on: 2024Äê3ÔÂ23ÈÕ
+ *  Created on: 2024å¹´3æœˆ23æ—¥
  *      Author: SSC
  */
 
@@ -21,7 +21,7 @@ void LED_Init(void)
     EALLOW;
     SysCtrlRegs.PCLKCR3.bit.GPIOINENCLK = 1;
 
-    //LED1 ¶Ë¿ÚÅäÖÃ
+    //LED Init
     GpioCtrlRegs.GPCMUX1.bit.GPIO66=0;
     GpioCtrlRegs.GPCDIR.bit.GPIO66=1;
     GpioCtrlRegs.GPCPUD.bit.GPIO66=0;
