@@ -1,5 +1,9 @@
 # DSP TI C2000 2_DSP环境配置和工程创建
 
+## 0. CCS 环境介绍
+
+![NULL](./assets/picture_10.jpg)
+
 ## 1. CCS 环境配置
 
 ### CCS 软件下载
@@ -77,10 +81,59 @@ Kits项选择：Entire feature will be unavailable。
 >
 >   带和不带 BIOS CMD 等文件。
 >
->   > - `cmd`文件夹：存放了 BIOS 和 nonBIOS 文件，也是对 DSP 内 RAM 和 FLASH 存储地址和容量的分配启动文件。在程序开发过程中，如果不使用 BIOS 操作系统，在仿真调试程序时，对 DSP内 RAM 和 FLASH 存储地址和容量的分配启动文件只需要 `28335_RAM_lnk.cmd` 和`DSP2833x_Headers_nonBIOS.cmd` 这两个。当程序仿真调试成功后，我们需要将其烧写到芯片内 FLASH 中，所以工程内存储地址和容量的分配启动文件就需要`F28335.cmd` 和 `DSP2833x_Headers_nonBIOS.cmd` 这两个。如果在 DSP 中移植了操作系统那么就需要使用`DSP2833x_Headers_BIOS.cmd` 文件。**工程中仅需要两个文件中的一个**。
+>   > - `cmd`文件夹：存放了 BIOS 和 nonBIOS 文件，也是对 DSP 内 RAM 和 FLASH 存储地址和容量的分配启动文件。在程序开发过程中，如果不使用 BIOS 操作系统，在仿真调试程序时，对 DSP 内 RAM 和 FLASH 存储地址和容量的分配启动文件只需要 `28335_RAM_lnk.cmd` 和`DSP2833x_Headers_nonBIOS.cmd` 这两个。当程序仿真调试成功后，我们需要将其烧写到芯片内 FLASH 中，所以工程内存储地址和容量的分配启动文件就需要`F28335.cmd` 和 `DSP2833x_Headers_nonBIOS.cmd` 这两个。如果在 DSP 中移植了操作系统那么就需要使用`DSP2833x_Headers_BIOS.cmd` 文件。**工程中仅需要两个文件中的一个**。
 >   > - `gel` 文件夹：该文件夹内存放了一个有关 DSP2833x 外设的`DSP2833x_Peripheral.gel` 文件。
 >   > - `include` 文件夹：该文件夹存放的是`DSP2833x_Libraries\DSP2833x_common\source`对应的头文件。
 >   > - `source` 文件夹：该文件夹内存放了 `DSP2833x_GlobalVariableDefs.c` 文件，里面主要是一些全局变量及条件编译等。
+
+#### 链接命令文件`.cmd`
+
+`.cmd`文件用于给各个段分配空间，便于区分程序和数据。
+
+![NULL](./assets/picture_11.jpg)
+
+1. RAM FLASH 分配
+
+![NULL](./assets/picture_12.jpg)
+
+```
+MEMORY
+{ 
+    PAGE 0: /* Program Memory(程序存储) */
+    FLASH: origin = 0x300000, length = 0x40000
+    PAGE 1: /* Data Memory(数据存储) */
+    M0SARAM: origin = 0x000000, length = 0x400
+    M1SARAM: origin = 0x000400, length = 0x400
+}
+```
+
+**RAM 中的数据掉电清空，FLASH 数据掉电保存，调试是先在 RAM 中调试程序，最后在 FLASH 中烧录程序**。
+
+2. 段分配
+
+| 段名(初始化的段) | 描述                   | 链接位置 |
+| ---------------- | ---------------------- | -------- |
+| `.text`          | 代码                   | FLASH    |
+| `.cint`          | 全局和静态变量的初始值 | FLASH    |
+| `.econst`        | 常数                   | FLASH    |
+| `.switch`        | switch 表达式的表格    | FLASH    |
+| `.pinit`         | 全局函数构造表         | FLASH    |
+
+| 段名(未初始化段) | 描述                     | 链接位置     |
+| ---------------- | ------------------------ | ------------ |
+| `.ebss`          | 全局和静态变量           | RAM          |
+| `.stack`         | 堆栈空间                 | 低64K字的RAM |
+| `.esysmem`       | `Far malloc`函数存储空间 | RAM          |
+
+```
+SECTIONS
+{
+    .text:> FLASH PAGE = 0
+    .ebss:> M0SARAM PAGE = 1
+    .cinit:> FLASH PAGE = 0
+    .stack:> M1SARAM PAGE = 1
+}
+```
 
 ### 工程的构成
 
