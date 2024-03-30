@@ -54,7 +54,7 @@ A 组：`GPIO0`-`GPIO31`，B 组：`GPIO32`-`GPIO63`，C 组：`GPIO64`-`GPIO87`
 
 对 GPIO 的定义操作的函数在 `DSP2833x_Gpio.c` 中。
 
-- GPIO 结构体
+### GPIO 结构体
 
 ```c
 struct GPIO_CTRL_REGS
@@ -82,7 +82,7 @@ struct GPIO_CTRL_REGS
 };
 ```
 
-- GPIO 输出控制
+### GPIO 输出控制
 
 GPIO 输出控制的方法：
 
@@ -94,4 +94,20 @@ GPIO 输出控制的方法：
 > >  利用 `GPxSET` 寄存器写 1（写 0 无效）对 IO 口置位。
 > >  利用 `GPxCLEAR` 寄存器写 1（写 0 无效）对 IO 口清零。
 > >  利用 `GPxTOOGLE` 寄存器置 1 后（写 0 无效）翻转 IO 输出电平，原来高电平变成低电平，原来低电平变成高电平。
+
+```c
+void GPIO_Init()    
+{
+	EALLOW;
+
+    // BEEP 端口配置
+    GpioCtrlRegs.GPAMUX1.bit.GPIO6=0;	// 使能 GPIO 引脚功能为通用GPIO
+    GpioCtrlRegs.GPADIR.bit.GPIO6=1;	// 设置 GPIO 为输出方向
+    GpioCtrlRegs.GPAPUD.bit.GPIO6=0;	// 设置 GPIO 可上拉
+
+    EDIS;
+
+    GpioDataRegs.GPACLEAR.bit.GPIO6=1;	// 初始化为低电平
+}
+```
 
