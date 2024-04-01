@@ -88,7 +88,7 @@ Kits项选择：Entire feature will be unavailable。
 
 #### 链接命令文件`.cmd`
 
-`.cmd`文件用于给各个段分配空间，便于区分程序和数据。
+`.cmd`文件用于给各个段分配存储空间，便于区分程序和数据，从而实现哈佛结构。
 
 ![NULL](./assets/picture_11.jpg)
 
