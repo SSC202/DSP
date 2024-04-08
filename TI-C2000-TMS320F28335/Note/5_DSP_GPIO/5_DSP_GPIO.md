@@ -1,4 +1,4 @@
-# DSP TI C2000 4_GPIO(general purpose intput output，通用输入输出端口)
+# DSP TI C2000 5_GPIO(general purpose intput output，通用输入输出端口)
 
 ## 1. F28335 GPIO
 
