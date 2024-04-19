@@ -42,8 +42,11 @@ F28335 芯片最高工作频率是 150MHZ，所以此时还不能直接 CPU 内�
 
 使用两个计数器来检测`OSCCLK`信号，计数器`OSCCLK Counter`随着`OSCCLK`信号的到来而计数，计数器`VOCLK Counter`是当PLL使能之后，随着`VCOCLK`信号的到来而计数，当7位的`OSCCLK`计数器溢出时，清除13位的`VCOCLK`计数器。所以，只要`OSCCLK`到来，`VCOCLK`计数器就不会溢出。
 
-如果`VCOCLK`信号丢失，PLL模块的输出就会进入默认频率，并保持增长。由于`OSCCLK`信号丢失，那么`OSCCLK`计数器就不再继续增加，`VCOCLK`计数器不能被周期性的清零，经过一段时间，`VCOCLK`计数器就会溢出。当`VCOCLK`计数器溢出之后，检测信号丢失逻辑器`Clock switch logic`就会重置CPU，外设和其他的设备的逻辑电平。这个复位信号被称为`MCLKRES` 
- 信号，这个信号只能由内部产生，外部的`XRS`信号不会被`MCLKRES`信号拉低。
+如果`VCOCLK`信号丢失，PLL模块的输出就会进入默认频率，并保持增长。由于`OSCCLK`信号丢失，那么`OSCCLK`计数器就不再继续增加，`VCOCLK`计数器不能被周期性的清零，经过一段时间，`VCOCLK`计数器就会溢出。当`VCOCLK`计数器溢出之后，检测信号丢失逻辑器`Clock switch logic`就会重置CPU，外设和其他的设备的逻辑电平。这个复位信号被称为`MCLKRES` 信号，这个信号只能由内部产生，外部的`XRS`信号不会被`MCLKRES`信号拉低。
+
+### 片外时钟
+
+![NULL](./assets/picture_17.jpg)
 
 ## 2. 系统控制和外设时钟
 
@@ -101,7 +104,41 @@ F28335 芯片最高工作频率是 150MHZ，所以此时还不能直接 CPU 内�
 
 ![NULL](./assets/picture_15.jpg)
 
-## 4. 自定义系统时钟
+## 4. 看门狗 Watch Dog
+
+![NULL](./assets/picture_18.jpg)
+
+`OSCCLK`经分频和WDCR分频后，若`WDDIS`为0，则看门狗计数器工作。当没有正确的安全狗秘钥，计数器计满后溢出可产生输出512个`OSCCLK`时钟的脉冲信号。该信号作为复位信号`WDRST`还是中断信号`WDINT`由`SCSR`的`WDENNIT`决定。当复位`RST`或者正确的秘钥`WDKEY`会重置看门狗计数器。
+
+看门狗的时钟`WDCLK`是晶振频率经过512分频得到，而不是主频`SYSCLKOUT`。
+
+- 看门狗的使用
+
+```c
+// 将中断向量表的WAKEINT指向ISR:wakeint_isr
+EALLOW;	// This is needed to write to EALLOW protected registers
+PieVectTable.WAKEINT = &wakeint_isr;
+EDIS;   // This is needed to disable write to EALLOW protected registers
+// 使能看门狗中断
+EALLOW;
+SysCtrlRegs.SCSR = BIT1;
+EDIS;
+// 使能看门狗
+EALLOW;
+SysCtrlRegs.WDCR = 0x0028;   //	WDPS 000 001 不分频
+EDIS;
+
+// 喂狗函数
+void ServiceDog(void)
+{
+    EALLOW;
+    SysCtrlRegs.WDKEY = 0x0055;
+    SysCtrlRegs.WDKEY = 0x00AA;
+    EDIS;
+}
+```
+
+## 5. 自定义系统时钟
 
 ### `InitSysCtrl()`函数
 
