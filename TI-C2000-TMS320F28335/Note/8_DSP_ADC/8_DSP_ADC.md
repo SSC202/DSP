@@ -157,3 +157,62 @@ ADC的转换时钟`ADCCLK`由外设时钟`HSPCLK`分频而来。
 ### ADC 输入通道选择排序控制寄存器
 
 ![NULL](./assets/picture_26.jpg)
+
+### 3. F28335 ADC 使用
+
+1. 使能 ADC 外设时钟及设置 ADC 工作时钟。
+
+```c
+// ADC 时钟使能
+EALLOW;
+SysCtrlRegs.PCLKCR0.bit.ADCENCLK = 1; // ADC clock enable
+EDIS;
+// ADC 时钟分频
+EALLOW;
+SysCtrlRegs.HISPCP.all = 3; 		// HSPCLK = SYSCLKOUT/(2*3) = 25MHz
+EDIS;
+```
+
+2. ADC 初始化设置
+
+```c
+// TI 提供的 ADC 初始化设置，包括参考电压设置和开启前延时
+InitAdc();
+
+void InitAdc(void)
+{
+    extern void DSP28x_usDelay(Uint32 Count);
+    EALLOW;
+    SysCtrlRegs.PCLKCR0.bit.ADCENCLK = 1;	//使能 ADC 时钟
+    ADC_cal();							  //调用 ADC_cal 汇编程序，它是 TI 提供的 ADC 校准程序，直接使用即可
+    EDIS;
+    AdcRegs.ADCTRL3.all = 0x00E0; 			// Power up bandgap/reference/ADC circuits/顺序采样
+    DELAY_US(ADC_usDELAY); 				    // 在 ADC 转换前需要一定延时
+}
+```
+
+3. ADC 工作方式设置，包括采样方式、工作频率、采样通道数
+
+```c
+AdcRegs.ADCTRL1.bit.ACQ_PS = 0x0f;			// 采样时间选择
+AdcRegs.ADCTRL3.bit.ADCCLKPS = 1;			//ADC 工作 25M 下不分频
+AdcRegs.ADCTRL1.bit.SEQ_CASC = 1;			// 1 通道模式
+AdcRegs.ADCCHSELSEQ1.bit.CONV00 = 0x0;		//采样通道
+AdcRegs.ADCTRL1.bit.CONT_RUN = 1;			//连续采样模式
+AdcRegs.ADCMAXCONV.bit.MAX_CONV1 = 0x0;		//最大采样通道数
+```
+
+4. 选择 ADC 触发方式，开启转换
+
+```c
+AdcRegs.ADCTRL2.all = 0x2000;
+```
+
+5. 读取 ADC 转换值
+
+```c
+while (AdcRegs.ADCST.bit.INT_SEQ1== 0);		//查询转换是否结束
+AdcRegs.ADCST.bit.INT_SEQ1_CLR = 1;			//清除中断标志位
+return AdcRegs.ADCRESULT0>>4;				//将转换结果返回出去(结果寄存器的高12位)
+```
+
