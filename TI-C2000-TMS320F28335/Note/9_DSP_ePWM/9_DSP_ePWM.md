@@ -84,7 +84,9 @@
 - TB 模块的计数模式
 
 **ePWM 的频率是由时基周期寄存器值（TBPRD）和时基计数器的计数模式（TBCTRL）共同决定的。**
-
+$$
+f_{TBCLK} = \frac{SYSCLKOUT}{HSPCLKDIV \times CLKDIV}
+$$
 <font color=LightGreen>1. 增-减计数模式（双倍周期）</font>
 
 ![NULL](./assets/picture_5.jpg)
