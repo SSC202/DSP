@@ -23,5 +23,6 @@ TI C2000系列笔记是基于HITsz DSP原理与应用 这门课程为基础记�
 | [7_DSP_EXTI](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Note/7_DSP_EXTI) | DSP的外部中断（未讲解）         | [6_F28335_EXTI_demo](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Code/6_F28335_EXTI_Demo) |
 | [8_DSP_ADC](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Note/8_DSP_ADC) | DSP的模数转换器（10-11）        | [7_F28335_ADC_demo](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Code/7_F28335_ADC_Demo) |
 | [9_DSP_ePWM](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Note/9_DSP_ePWM) | DSP的ePWM模块                   |                                                              |
+| [10_DSP_CPU_Timer](https://github.com/SSC202/DSP/tree/main/TI-C2000-TMS320F28335/Note/10_DSP_CPU_TIM)|DSP的CPU时钟| |
 
 STM32 Arm_DSP库的使用主要基于B站UP主 zeshoufx 的DSP库使用视频。
