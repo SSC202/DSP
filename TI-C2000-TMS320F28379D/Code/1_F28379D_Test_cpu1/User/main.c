@@ -1,20 +1,17 @@
 #include "F28x_Project.h"
+#include "driverlib.h"
+#include "device.h"
 
-void main(void)
-{
-    uint32_t delay = 0;
-    InitSysCtrl();
+void main(void) {
+    Device_init();
+    Device_initGPIO();
+    GPIO_setPinConfig(GPIO_35_GPIO35);
+    GPIO_setDirectionMode(35, GPIO_DIR_MODE_OUT);
 
-    // Set pin direction
-    GPIO_SetupPinOptions(35, GPIO_OUTPUT, GPIO_PUSHPULL);
-    while(1)
-    {
-        delay++;
-        if (delay > 2000000)
-            delay = 0;
-        if (delay > 1000000)
-            GPIO_WritePin(35, 1);
-        if (delay < 1000000)
-            GPIO_WritePin(35, 0);
+    while(1) {
+        GPIO_writePin(35, 1);
+        DELAY_US(500000);
+        GPIO_writePin(35, 0);
+        DELAY_US(500000);
     }
 }

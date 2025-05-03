@@ -112,5 +112,8 @@ PDE_DEPS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Library \
+Library/driverlib \
+Library/driverlib/ccs/Debug \
+Library/driverlib/ccs/Release \
 User \
 

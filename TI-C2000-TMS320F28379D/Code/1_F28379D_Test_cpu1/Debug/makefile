@@ -16,12 +16,47 @@ ORDERED_OBJS += \
 "./Library/F2837xD_Ipc.obj" \
 "./Library/F2837xD_SysCtrl.obj" \
 "./Library/F2837xD_usDelay.obj" \
+"./Library/device.obj" \
+"./Library/driverlib/adc.obj" \
+"./Library/driverlib/asysctl.obj" \
+"./Library/driverlib/can.obj" \
+"./Library/driverlib/cla.obj" \
+"./Library/driverlib/clb.obj" \
+"./Library/driverlib/cmpss.obj" \
+"./Library/driverlib/cputimer.obj" \
+"./Library/driverlib/dac.obj" \
+"./Library/driverlib/dcsm.obj" \
+"./Library/driverlib/dma.obj" \
+"./Library/driverlib/ecap.obj" \
+"./Library/driverlib/emif.obj" \
+"./Library/driverlib/epwm.obj" \
+"./Library/driverlib/eqep.obj" \
+"./Library/driverlib/flash.obj" \
+"./Library/driverlib/gpio.obj" \
+"./Library/driverlib/hrpwm.obj" \
+"./Library/driverlib/i2c.obj" \
+"./Library/driverlib/interrupt.obj" \
+"./Library/driverlib/ipc.obj" \
+"./Library/driverlib/mcbsp.obj" \
+"./Library/driverlib/memcfg.obj" \
+"./Library/driverlib/sci.obj" \
+"./Library/driverlib/sdfm.obj" \
+"./Library/driverlib/spi.obj" \
+"./Library/driverlib/sysctl.obj" \
+"./Library/driverlib/upp.obj" \
+"./Library/driverlib/usb.obj" \
+"./Library/driverlib/version.obj" \
+"./Library/driverlib/xbar.obj" \
 "./User/main.obj" \
+"../Library/driverlib/ccs/Debug/driverlib.lib" \
+"../Library/driverlib/ccs/Debug/driverlib_coff.lib" \
+"../Library/driverlib/ccs/Release/driverlib.lib" \
+"../Library/driverlib/ccs/Release/driverlib_coff.lib" \
 $(GEN_CMDS__FLAG) \
+-l"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/driverlib/ccs/Debug/driverlib.lib" \
 -l"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Headers/cmd/F2837xD_Headers_nonBIOS_cpu1.cmd" \
 -l"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Common/cmd/2837xD_RAM_lnk_cpu1.cmd" \
 -l"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Common/lib/rts2800_fpu32.lib" \
--llibc.a \
 
 -include ../makefile.init
 
@@ -31,8 +66,14 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include Library/subdir_vars.mk
+-include Library/driverlib/subdir_vars.mk
+-include Library/driverlib/ccs/Debug/subdir_vars.mk
+-include Library/driverlib/ccs/Release/subdir_vars.mk
 -include User/subdir_vars.mk
 -include Library/subdir_rules.mk
+-include Library/driverlib/subdir_rules.mk
+-include Library/driverlib/ccs/Debug/subdir_rules.mk
+-include Library/driverlib/ccs/Release/subdir_rules.mk
 -include User/subdir_rules.mk
 -include objects.mk
 
@@ -143,14 +184,14 @@ BIN_OUTPUTS__QUOTED += \
 
 
 # All Target
-all: $(OBJS) $(GEN_CMDS)
+all: $(OBJS) $(LIB_SRCS) $(GEN_CMDS)
 	@$(MAKE) --no-print-directory -Onone "1_F28379D_Test_cpu1.out"
 
 # Tool invocations
-1_F28379D_Test_cpu1.out: $(OBJS) $(GEN_CMDS)
+1_F28379D_Test_cpu1.out: $(OBJS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla1 --float_support=fpu32 --tmu_support=tmu0 --vcu_support=vcu2 --advice:performance=all --define=CPU1 -g --diag_warning=225 --diag_wrap=off --display_error_number --abi=coffabi -z -m"1_F28379D_Test_cpu1.map" --stack_size=0x200 --warn_sections -i"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/lib" -i"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Common/cmd" -i"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Headers/cmd" -i"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/include" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="1_F28379D_Test_cpu1_linkInfo.xml" --entry_point=_c_int00 --rom_model -o "1_F28379D_Test_cpu1.out" $(ORDERED_OBJS)
+	"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla1 --float_support=fpu32 --tmu_support=tmu0 --vcu_support=vcu2 --advice:performance=all --define=CPU1 --define=_DUAL_HEADERS -g --diag_warning=225 --diag_wrap=off --display_error_number --abi=coffabi -z -m"1_F28379D_Test_cpu1.map" --stack_size=0x200 --warn_sections -i"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/lib" -i"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Common/cmd" -i"F:/STM32SSC/Note/TI/DSP/TI-C2000-TMS320F28379D/Code/Library/F28379D_Headers/cmd" -i"D:/ti/ccs910/ccs/tools/compiler/ti-cgt-c2000_18.12.2.LTS/include" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="1_F28379D_Test_cpu1_linkInfo.xml" --entry_point=_c_int00 --rom_model -o "1_F28379D_Test_cpu1.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
@@ -164,8 +205,9 @@ all: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Library\F2837xD_CodeStartBranch.obj" "Library\F2837xD_GlobalVariableDefs.obj" "Library\F2837xD_Gpio.obj" "Library\F2837xD_Ipc.obj" "Library\F2837xD_SysCtrl.obj" "Library\F2837xD_usDelay.obj" "User\main.obj" 
-	-$(RM) "Library\F2837xD_GlobalVariableDefs.d" "Library\F2837xD_Gpio.d" "Library\F2837xD_Ipc.d" "Library\F2837xD_SysCtrl.d" "User\main.d" 
+	-$(RM) "Library\F2837xD_CodeStartBranch.obj" "Library\F2837xD_GlobalVariableDefs.obj" "Library\F2837xD_Gpio.obj" "Library\F2837xD_Ipc.obj" "Library\F2837xD_SysCtrl.obj" "Library\F2837xD_usDelay.obj" "Library\device.obj" "Library\driverlib\adc.obj" "Library\driverlib\asysctl.obj" "Library\driverlib\can.obj" "Library\driverlib\cla.obj" "Library\driverlib\clb.obj" "Library\driverlib\cmpss.obj" "Library\driverlib\cputimer.obj" "Library\driverlib\dac.obj" "Library\driverlib\dcsm.obj" "Library\driverlib\dma.obj" "Library\driverlib\ecap.obj" "Library\driverlib\emif.obj" "Library\driverlib\epwm.obj" "Library\driverlib\eqep.obj" "Library\driverlib\flash.obj" "Library\driverlib\gpio.obj" "Library\driverlib\hrpwm.obj" "Library\driverlib\i2c.obj" "Library\driverlib\interrupt.obj" "Library\driverlib\ipc.obj" "Library\driverlib\mcbsp.obj" "Library\driverlib\memcfg.obj" "Library\driverlib\sci.obj" "Library\driverlib\sdfm.obj" "Library\driverlib\spi.obj" "Library\driverlib\sysctl.obj" "Library\driverlib\upp.obj" 
+	-$(RM) "Library\driverlib\usb.obj" "Library\driverlib\version.obj" "Library\driverlib\xbar.obj" "User\main.obj" 
+	-$(RM) "Library\F2837xD_GlobalVariableDefs.d" "Library\F2837xD_Gpio.d" "Library\F2837xD_Ipc.d" "Library\F2837xD_SysCtrl.d" "Library\device.d" "Library\driverlib\adc.d" "Library\driverlib\asysctl.d" "Library\driverlib\can.d" "Library\driverlib\cla.d" "Library\driverlib\clb.d" "Library\driverlib\cmpss.d" "Library\driverlib\cputimer.d" "Library\driverlib\dac.d" "Library\driverlib\dcsm.d" "Library\driverlib\dma.d" "Library\driverlib\ecap.d" "Library\driverlib\emif.d" "Library\driverlib\epwm.d" "Library\driverlib\eqep.d" "Library\driverlib\flash.d" "Library\driverlib\gpio.d" "Library\driverlib\hrpwm.d" "Library\driverlib\i2c.d" "Library\driverlib\interrupt.d" "Library\driverlib\ipc.d" "Library\driverlib\mcbsp.d" "Library\driverlib\memcfg.d" "Library\driverlib\sci.d" "Library\driverlib\sdfm.d" "Library\driverlib\spi.d" "Library\driverlib\sysctl.d" "Library\driverlib\upp.d" "Library\driverlib\usb.d" "Library\driverlib\version.d" "Library\driverlib\xbar.d" "User\main.d" 
 	-$(RM) "Library\F2837xD_CodeStartBranch.d" "Library\F2837xD_usDelay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

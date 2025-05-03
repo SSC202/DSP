@@ -13,13 +13,15 @@ C_SRCS += \
 ../Library/F2837xD_GlobalVariableDefs.c \
 ../Library/F2837xD_Gpio.c \
 ../Library/F2837xD_Ipc.c \
-../Library/F2837xD_SysCtrl.c 
+../Library/F2837xD_SysCtrl.c \
+../Library/device.c 
 
 C_DEPS += \
 ./Library/F2837xD_GlobalVariableDefs.d \
 ./Library/F2837xD_Gpio.d \
 ./Library/F2837xD_Ipc.d \
-./Library/F2837xD_SysCtrl.d 
+./Library/F2837xD_SysCtrl.d \
+./Library/device.d 
 
 OBJS += \
 ./Library/F2837xD_CodeStartBranch.obj \
@@ -27,7 +29,8 @@ OBJS += \
 ./Library/F2837xD_Gpio.obj \
 ./Library/F2837xD_Ipc.obj \
 ./Library/F2837xD_SysCtrl.obj \
-./Library/F2837xD_usDelay.obj 
+./Library/F2837xD_usDelay.obj \
+./Library/device.obj 
 
 ASM_DEPS += \
 ./Library/F2837xD_CodeStartBranch.d \
@@ -39,13 +42,15 @@ OBJS__QUOTED += \
 "Library\F2837xD_Gpio.obj" \
 "Library\F2837xD_Ipc.obj" \
 "Library\F2837xD_SysCtrl.obj" \
-"Library\F2837xD_usDelay.obj" 
+"Library\F2837xD_usDelay.obj" \
+"Library\device.obj" 
 
 C_DEPS__QUOTED += \
 "Library\F2837xD_GlobalVariableDefs.d" \
 "Library\F2837xD_Gpio.d" \
 "Library\F2837xD_Ipc.d" \
-"Library\F2837xD_SysCtrl.d" 
+"Library\F2837xD_SysCtrl.d" \
+"Library\device.d" 
 
 ASM_DEPS__QUOTED += \
 "Library\F2837xD_CodeStartBranch.d" \
@@ -59,6 +64,7 @@ C_SRCS__QUOTED += \
 "../Library/F2837xD_GlobalVariableDefs.c" \
 "../Library/F2837xD_Gpio.c" \
 "../Library/F2837xD_Ipc.c" \
-"../Library/F2837xD_SysCtrl.c" 
+"../Library/F2837xD_SysCtrl.c" \
+"../Library/device.c" 
 
 
